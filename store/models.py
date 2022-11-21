@@ -9,6 +9,12 @@ class Product(models.Model):
     collection = models.ForeignKey('Collection', on_delete=models.PROTECT)
     promotions = models.ManyToManyField('Promotion')
 
+    def __str__(self) -> str:
+        return self.title
+
+    class Meta:
+        ordering = ['title']
+
 class Customer(models.Model):
     MEMBERSHIP_BRONZE = 'B'
     MEMBERSHIP_SILVER = 'S'
@@ -27,6 +33,12 @@ class Customer(models.Model):
     birth_date = models.DateField(null=True)
     membership = models.CharField(max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE)
  
+    def __str__(self) -> str:
+        return self.first_name + ' ' + self.last_name
+
+    class Meta:
+        ordering = ['first_name', 'last_name']
+
 class Order(models.Model):
     PAYMENT_STATUS_PENDING = 'P'
     PAYMENT_STATUS_COMPLETE = 'C'
@@ -52,6 +64,13 @@ class Collection(models.Model):
     title = models.TextField()
     featured_product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True, related_name='+')
     
+    def __str__(self) -> str:
+        return self.title
+
+    class Meta:
+        ordering = ['title']
+
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.PROTECT)
     quantity = models.PositiveSmallIntegerField()
